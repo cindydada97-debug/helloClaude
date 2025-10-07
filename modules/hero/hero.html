@@ -1,0 +1,46 @@
+<!-- 英雄区模块 HTML片段 -->
+<section class="hero" id="hero-section">
+  <!-- 背景装饰 -->
+  <div class="hero__background">
+    <div class="hero__grid-pattern"></div>
+    <div class="hero__glow"></div>
+  </div>
+
+  <!-- 内容区域 -->
+  <div class="hero__content">
+    <!-- 主标题 -->
+    <h1 class="hero__title">
+      HappyPuppy.ai
+      <span class="hero__title-glow"></span>
+    </h1>
+
+    <!-- 副标题 -->
+    <p class="hero__subtitle">
+      YOUR PERSONAL TOOL STATION
+    </p>
+
+    <!-- 搜索框 -->
+    <div class="hero__search">
+      <div class="search-box">
+        <i class="fa-solid fa-search search-box__icon"></i>
+        <input
+          type="text"
+          id="search-input"
+          class="search-box__input"
+          placeholder="搜索工具... / Search tools..."
+          autocomplete="off"
+          aria-label="搜索工具"
+        >
+        <kbd class="search-box__shortcut">
+          <span class="key">⌘</span>
+          <span class="key">K</span>
+        </kbd>
+      </div>
+
+      <!-- 搜索建议下拉（可选） -->
+      <div class="search-suggestions" id="search-suggestions">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+  </div>
+</section>

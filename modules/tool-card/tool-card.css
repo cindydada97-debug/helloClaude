@@ -1,0 +1,294 @@
+/* ==========================================================================
+   工具卡片样式 (Tool Card Styles)
+   用途: 工具展示卡片
+   特性: 玻璃态、分类色渐变、Hover动画
+   变量: --category-color, --category-glow
+   ========================================================================== */
+
+/**
+ * 卡片容器
+ * - 玻璃态效果
+ * - 相对定位，为内部绝对定位元素提供参考
+ * - 圆角大，视觉柔和
+ */
+.tool-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * Hover状态
+ * - 边框高亮（分类颜色）
+ * - 上浮效果
+ * - 外发光阴影
+ */
+.tool-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--category-color, rgba(255, 255, 255, 0.15));
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--category-glow, rgba(0, 0, 0, 0.2));
+}
+
+/**
+ * Active按下状态
+ * - 轻微缩小
+ */
+.tool-card:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/**
+ * 背景渐变光晕
+ * - 绝对定位在左上角
+ * - 从分类颜色渐变到透明
+ * - 不影响内容可读性
+ */
+.tool-card__glow {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.tool-card:hover .tool-card__glow {
+  opacity: 0.8;
+}
+
+/* 分类颜色光晕 */
+.tool-card__glow--blue {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+}
+
+.tool-card__glow--green {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+}
+
+.tool-card__glow--purple {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+}
+
+.tool-card__glow--orange {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+}
+
+.tool-card__glow--pink {
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%);
+}
+
+/**
+ * 卡片内容容器
+ * - 相对定位，覆盖在光晕之上
+ */
+.tool-card__content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * 工具图标
+ * - 圆角方形容器
+ * - 固定尺寸
+ */
+.tool-card__header {
+  margin-bottom: 1.5rem;
+}
+
+.tool-card__icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tool-card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/**
+ * 标题组
+ */
+.tool-card__title-group {
+  margin-bottom: 1rem;
+}
+
+.tool-card__title {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.2;
+}
+
+.tool-card__subtitle {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+/**
+ * 分类标签区域
+ */
+.tool-card__meta {
+  margin-bottom: 1rem;
+}
+
+/**
+ * 分类标签
+ * - 内联flex布局
+ * - 分类颜色背景
+ * - 圆角胶囊形状
+ */
+.tool-card__category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tool-card__category--blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.tool-card__category--green {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tool-card__category--purple {
+  background: rgba(139, 92, 246, 0.15);
+  color: #A78BFA;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.tool-card__category--orange {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.tool-card__category--pink {
+  background: rgba(236, 72, 153, 0.15);
+  color: #F472B6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+}
+
+/**
+ * 描述文字
+ * - 两行截断（可选）
+ */
+.tool-card__description {
+  font-size: 0.875rem; /* 14px */
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  flex: 1;
+}
+
+/**
+ * 标签组
+ * - 横向排列
+ * - 自动换行
+ */
+.tool-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tool-card__tags .tag {
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+}
+
+.tool-card:hover .tool-card__tags .tag {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/**
+ * Hover箭头
+ * - 初始隐藏在右侧外部
+ * - Hover时滑入
+ */
+.tool-card__arrow {
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%) translateX(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: var(--category-color, rgba(255, 255, 255, 0.5));
+  font-size: 1.5rem;
+  z-index: 2;
+}
+
+.tool-card:hover .tool-card__arrow {
+  transform: translateY(-50%) translateX(0);
+  opacity: 1;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .tool-card {
+    padding: 1.5rem;
+    min-height: 280px;
+  }
+
+  .tool-card__icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .tool-card__title {
+    font-size: 1.25rem; /* 20px */
+  }
+
+  .tool-card__arrow {
+    display: none; /* 移动端隐藏箭头 */
+  }
+}
+
+@media (max-width: 640px) {
+  .tool-card {
+    padding: 1.25rem;
+  }
+}

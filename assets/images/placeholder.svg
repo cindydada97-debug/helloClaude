@@ -1,0 +1,6 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 占位图 - 开发阶段使用 -->
+  <rect width="400" height="300" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <text x="200" y="140" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.4)" text-anchor="middle">工具缩略图占位</text>
+  <text x="200" y="170" font-family="Arial, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" text-anchor="middle">Tool Thumbnail Placeholder</text>
+</svg>

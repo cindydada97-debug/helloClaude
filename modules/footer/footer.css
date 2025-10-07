@@ -1,0 +1,167 @@
+/* ==========================================================================
+   页脚样式 (Footer Styles)
+   用途: 版权信息、链接、品牌标识
+   ========================================================================== */
+
+.footer {
+  margin-top: 8rem;
+  padding: 4rem 2rem 2rem;
+  background: rgba(10, 10, 15, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.footer__container {
+  max-width: 1440px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/**
+ * 装饰性分隔线
+ */
+.footer__divider {
+  width: 100px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  margin: 0 auto 2rem;
+}
+
+/**
+ * 品牌信息
+ */
+.footer__brand {
+  margin-bottom: 2rem;
+}
+
+.footer__logo {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+
+.footer__tagline {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
+/**
+ * 链接组
+ * - 横向排列
+ * - 使用分隔符
+ */
+.footer__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer__link {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 0.875rem; /* 14px */
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer__link:hover {
+  color: #3B82F6;
+}
+
+.footer__link i {
+  font-size: 1rem;
+}
+
+.footer__separator {
+  color: rgba(255, 255, 255, 0.2);
+  user-select: none;
+}
+
+/**
+ * 版权信息
+ */
+.footer__copyright {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.875rem; /* 14px */
+}
+
+.footer__copyright p {
+  margin: 0.5rem 0;
+}
+
+/**
+ * Made with love
+ */
+.footer__made-with {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.footer__made-with i {
+  color: #EC4899;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 6rem;
+    padding: 3rem 1.5rem 1.5rem;
+  }
+
+  .footer__logo {
+    font-size: 1.25rem; /* 20px */
+  }
+
+  .footer__links {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer__separator {
+    display: none;
+  }
+
+  .footer__link {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    margin-top: 4rem;
+  }
+
+  .footer__copyright {
+    font-size: 0.75rem; /* 12px */
+  }
+}

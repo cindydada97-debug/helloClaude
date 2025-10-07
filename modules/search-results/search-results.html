@@ -1,0 +1,36 @@
+<!-- 搜索结果模块 HTML片段 -->
+<section class="search-results" id="search-results-section">
+  <!-- 结果统计头部 -->
+  <div class="search-results__header">
+    <div class="search-results__count">
+      <h2 class="count-number">
+        <span class="count-prefix">推荐工具</span>
+        <span id="result-count" class="count-value"></span>
+      </h2>
+      <p class="count-subtitle">
+        <span id="result-subtitle-en">FEATURED TOOLS</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- 工具网格容器 -->
+  <div class="tool-grid" id="tool-grid">
+    <!-- 动态插入工具卡片 -->
+  </div>
+
+  <!-- 无结果状态 -->
+  <div class="no-results" id="no-results" style="display: none;">
+    <div class="no-results__icon">
+      <i class="fa-solid fa-search"></i>
+    </div>
+    <h3 class="no-results__title">未找到相关工具</h3>
+    <p class="no-results__subtitle">
+      NO RESULTS FOR "<span id="search-query-display"></span>"
+    </p>
+    <p class="no-results__hint">试试其他关键词或浏览所有工具</p>
+    <button class="btn-reset" id="reset-search-btn">
+      <i class="fa-solid fa-rotate-left"></i>
+      重置搜索
+    </button>
+  </div>
+</section>

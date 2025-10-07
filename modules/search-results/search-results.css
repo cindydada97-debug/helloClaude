@@ -1,0 +1,224 @@
+/* ==========================================================================
+   搜索结果样式 (Search Results Styles)
+   用途: 工具网格布局、结果统计、无结果状态
+   响应式: 1-4列自适应网格
+   ========================================================================== */
+
+/**
+ * 搜索结果容器
+ * - 最大宽度限制
+ * - 居中显示
+ */
+.search-results {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/**
+ * 结果头部
+ * - 包含统计信息
+ */
+.search-results__header {
+  margin-bottom: 3rem;
+}
+
+/**
+ * 结果数量统计
+ */
+.search-results__count {
+  text-align: center;
+}
+
+.count-number {
+  font-size: 2rem; /* 32px */
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.count-prefix {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.count-value {
+  color: #3B82F6;
+}
+
+.count-subtitle {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+/**
+ * 工具网格
+ * - CSS Grid布局
+ * - 响应式列数
+ */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+/* 响应式网格 - 针对大屏优化 */
+@media (min-width: 1920px) {
+  .tool-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .tool-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/**
+ * 无结果状态
+ * - 居中显示
+ * - 大图标和文字提示
+ */
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.no-results__icon {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  margin-bottom: 2rem;
+}
+
+.no-results__icon i {
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.no-results__title {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+
+.no-results__subtitle {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 1rem 0;
+}
+
+.no-results__subtitle span {
+  color: #3B82F6;
+  font-weight: 500;
+}
+
+.no-results__hint {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 2rem 0;
+}
+
+/**
+ * 重置按钮
+ */
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  color: #60A5FA;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reset:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.btn-reset:active {
+  transform: translateY(0);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .search-results {
+    padding: 3rem 1.5rem;
+  }
+
+  .search-results__header {
+    margin-bottom: 2rem;
+  }
+
+  .count-number {
+    font-size: 1.5rem; /* 24px */
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .no-results {
+    padding: 4rem 1.5rem;
+  }
+
+  .no-results__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .no-results__icon i {
+    font-size: 2rem;
+  }
+}

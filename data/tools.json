@@ -1,0 +1,71 @@
+{
+  "tools": [
+    {
+      "id": "nano-banana",
+      "name": "Nano Banana",
+      "nameEn": "Nano Banana",
+      "category": "图像",
+      "categoryEn": "Image",
+      "description": "基于AI的智能图像分类工具，快速识别和标注图片内容",
+      "descriptionEn": "AI-powered image classification tool",
+      "icon": "fa-image",
+      "thumbnail": "./assets/images/placeholder.svg",
+      "color": "purple",
+      "tags": ["AI", "图像处理", "分类"],
+      "route": "./tools/nano-banana/",
+      "featured": true
+    },
+    {
+      "id": "mandala",
+      "name": "Mandala",
+      "nameEn": "Mandala Garden",
+      "category": "游戏",
+      "categoryEn": "Gaming",
+      "description": "放松身心的拔曼陀罗小游戏，在禅意花园中获得平静",
+      "descriptionEn": "Relaxing mandala pulling game",
+      "icon": "fa-spa",
+      "thumbnail": "./assets/images/placeholder.svg",
+      "color": "pink",
+      "tags": ["休闲", "解压", "禅意"],
+      "route": "./tools/mandala/",
+      "featured": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "programming",
+      "name": "编程",
+      "nameEn": "Programming",
+      "icon": "fa-code",
+      "color": "blue"
+    },
+    {
+      "id": "productivity",
+      "name": "效率",
+      "nameEn": "Productivity",
+      "icon": "fa-bolt",
+      "color": "green"
+    },
+    {
+      "id": "image",
+      "name": "图像",
+      "nameEn": "Image",
+      "icon": "fa-image",
+      "color": "purple"
+    },
+    {
+      "id": "office",
+      "name": "办公",
+      "nameEn": "Office",
+      "icon": "fa-briefcase",
+      "color": "orange"
+    },
+    {
+      "id": "gaming",
+      "name": "游戏",
+      "nameEn": "Gaming",
+      "icon": "fa-gamepad",
+      "color": "pink"
+    }
+  ]
+}

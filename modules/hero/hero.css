@@ -1,0 +1,215 @@
+/* ==========================================================================
+   英雄区样式 (Hero Section Styles)
+   用途: 主标题、搜索框、背景装饰
+   特效: 玻璃态、勾线网格、光晕效果
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem 4rem;
+  overflow: hidden;
+}
+
+/* 背景装饰容器 */
+.hero__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 勾线网格图案 */
+.hero__grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.5;
+}
+
+/* 光晕效果 */
+.hero__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.15) 0%,
+    transparent 70%
+  );
+  filter: blur(80px);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* 内容容器 */
+.hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+/* 主标题 */
+.hero__title {
+  font-size: 4.5rem; /* 72px */
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+  position: relative;
+  line-height: 1.1;
+}
+
+/* 副标题 */
+.hero__subtitle {
+  font-size: 1rem; /* 16px */
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 3rem;
+}
+
+/* 搜索框容器 */
+.hero__search {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* 搜索框主体 */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1),
+              0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.search-box__icon {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.search-box__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+  color: #FFFFFF;
+  font-family: 'Noto Sans SC', 'Inter', sans-serif;
+}
+
+.search-box__input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.search-box__shortcut {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.search-box__shortcut .key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+}
+
+/* 搜索建议下拉框 */
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: rgba(19, 19, 24, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  padding: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+}
+
+.search-suggestions.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 70vh;
+    padding: 6rem 1.5rem 3rem;
+  }
+
+  .hero__title {
+    font-size: 3rem; /* 48px */
+  }
+
+  .hero__subtitle {
+    font-size: 0.875rem; /* 14px */
+    margin-bottom: 2rem;
+  }
+
+  .search-box {
+    padding: 0.875rem 1rem;
+  }
+
+  .search-box__shortcut {
+    display: none; /* 移动端隐藏快捷键提示 */
+  }
+}
+
+@media (max-width: 640px) {
+  .hero__title {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  .hero__subtitle {
+    font-size: 0.75rem; /* 12px */
+  }
+}

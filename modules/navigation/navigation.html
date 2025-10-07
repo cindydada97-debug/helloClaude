@@ -1,0 +1,66 @@
+<!-- 导航栏模块 HTML片段 -->
+<nav class="navigation" id="main-navigation">
+  <div class="navigation__container">
+    <!-- Logo区域 -->
+    <div class="navigation__logo">
+      <a href="/" class="logo-link">
+        <!-- TODO: 替换为实际Logo -->
+        <div class="logo-icon-temp">
+          <i class="fa-solid fa-dog"></i>
+        </div>
+        <div class="logo-text">
+          <h1>HappyPuppy.ai</h1>
+          <span>PERSONAL TOOL STATION</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 分类导航 -->
+    <ul class="navigation__categories" id="category-nav">
+      <li>
+        <a href="?category=programming" class="category-link" data-category="programming" data-color="blue">
+          <span class="category-name">编程</span>
+          <span class="category-name-en">Programming</span>
+        </a>
+      </li>
+      <li>
+        <a href="?category=productivity" class="category-link" data-category="productivity" data-color="green">
+          <span class="category-name">效率</span>
+          <span class="category-name-en">Productivity</span>
+        </a>
+      </li>
+      <li>
+        <a href="?category=image" class="category-link" data-category="image" data-color="purple">
+          <span class="category-name">图像</span>
+          <span class="category-name-en">Image</span>
+        </a>
+      </li>
+      <li>
+        <a href="?category=office" class="category-link" data-category="office" data-color="orange">
+          <span class="category-name">办公</span>
+          <span class="category-name-en">Office</span>
+        </a>
+      </li>
+      <li>
+        <a href="?category=gaming" class="category-link" data-category="gaming" data-color="pink">
+          <span class="category-name">游戏</span>
+          <span class="category-name-en">Gaming</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- 右侧操作区 -->
+    <div class="navigation__actions">
+      <button class="search-trigger" id="search-trigger-btn" aria-label="搜索">
+        <i class="fa-solid fa-search"></i>
+      </button>
+
+      <!-- 汉堡菜单（移动端） -->
+      <button class="hamburger-menu" id="hamburger-menu-btn" aria-label="菜单">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+</nav>

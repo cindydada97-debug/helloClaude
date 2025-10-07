@@ -3,634 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菜狗休闲一刻</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+    <meta name="description" content="HappyPuppy.ai - 个人工具站，提供编程、效率、图像、办公、游戏等多种实用工具">
+    <meta name="keywords" content="工具站,在线工具,编程工具,效率工具,图像工具">
+    <meta name="author" content="HappyPuppy.ai Team">
 
+    <title>HappyPuppy.ai - 个人工具站</title>
+
+    <!-- Favicon (待替换) -->
+    <link rel="icon" href="./assets/logo/favicon.ico">
+
+    <!-- 外部CDN预连接 -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-primary': '#0A0A0F',
+                        'dark-secondary': '#131318',
+                    },
+                    fontFamily: {
+                        'sans': ['Noto Sans SC', 'Inter', 'system-ui'],
+                    },
+                    screens: {
+                        '2xl': '1920px',
+                        '3xl': '2560px',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 模块样式 - 使用相对路径 -->
+    <link rel="stylesheet" href="./modules/navigation/navigation.css">
+    <link rel="stylesheet" href="./modules/hero/hero.css">
+    <link rel="stylesheet" href="./modules/tool-card/tool-card.css">
+    <link rel="stylesheet" href="./modules/search-results/search-results.css">
+    <link rel="stylesheet" href="./modules/footer/footer.css">
+
+    <!-- 全局样式 -->
+    <style>
         * {
             font-family: 'Noto Sans SC', 'Inter', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #0A0A0F 0%, #131318 100%);
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #FFFFFF;
         }
 
-        .bento-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 32px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
         }
 
-        .bento-card::before {
-            content: '';
-            position: absolute;
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 加载动画 */
+        .app-loading {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        }
-
-        .bento-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-4px);
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .gradient-blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(59, 130, 246, 0) 100%);
-        }
-
-        .gradient-purple {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0) 100%);
-        }
-
-        .gradient-pink {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.8) 0%, rgba(236, 72, 153, 0) 100%);
-        }
-
-        .gradient-green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.8) 0%, rgba(16, 185, 129, 0) 100%);
-        }
-
-        .gradient-orange {
-            background: linear-gradient(135deg, rgba(251, 146, 60, 0.8) 0%, rgba(251, 146, 60, 0) 100%);
-        }
-
-        .icon-wrapper {
-            width: 56px;
-            height: 56px;
+            bottom: 0;
+            background: #0A0A0F;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 16px;
-            font-size: 24px;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
 
-        .stat-line {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: drawLine 2s ease-out forwards;
+        .app-loading.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
-        @keyframes drawLine {
-            to {
-                stroke-dashoffset: 0;
-            }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #3B82F6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
         }
 
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .grid-pattern {
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        .skill-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .skill-progress {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 1s ease-out;
-        }
-
-        @media (max-width: 768px) {
-            .bento-card {
-                padding: 24px;
-            }
+        .loading-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
     </style>
 </head>
-<body class="grid-pattern">
-    <div class="max-w-[1920px] mx-auto px-8 py-16">
-        <!-- Header -->
-        <div class="mb-12 text-center">
-            <h1 class="text-7xl font-black text-white mb-4">菜狗</h1>
-            <p class="text-2xl text-gray-400 font-light tracking-wide">EARTH CLASS-E OBSERVER</p>
-            <div class="mt-6 flex justify-center gap-4">
-                <div class="px-6 py-2 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-sm">
-                    <i class="fas fa-globe mr-2"></i>地球E级观察员
-                </div>
-                <div class="px-6 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm">
-                    <i class="fas fa-code mr-2"></i>Developer
-                </div>
-            </div>
-        </div>
-
-        <!-- Bento Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-auto">
-
-            <!-- 主要介绍卡片 - 跨2列2行 -->
-            <div class="bento-card lg:col-span-2 lg:row-span-2">
-                <div class="flex items-start gap-6 mb-8">
-                    <div class="icon-wrapper gradient-blue">
-                        <i class="fas fa-user-astronaut text-white"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-4xl font-bold text-white mb-2">关于我</h2>
-                        <p class="text-gray-400 text-sm tracking-wider">ABOUT ME</p>
-                    </div>
-                </div>
-
-                <div class="space-y-6 text-gray-300 leading-relaxed">
-                    <p class="text-lg">
-                        你好，我是<span class="text-white font-bold">菜狗</span>，一名来自地球的E级观察员。
-                        在这个充满未知的宇宙中，我用代码记录着这个星球的点点滴滴。
-                    </p>
-
-                    <div class="grid grid-cols-2 gap-4 pt-4">
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-map-marker-alt text-blue-400"></i>
-                                <span class="text-sm text-gray-400">Location</span>
-                            </div>
-                            <p class="text-white font-medium pl-7">地球 • Earth</p>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-briefcase text-purple-400"></i>
-                                <span class="text-sm text-gray-400">Role</span>
-                            </div>
-                            <p class="text-white font-medium pl-7">观察员 • Observer</p>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-layer-group text-pink-400"></i>
-                                <span class="text-sm text-gray-400">Level</span>
-                            </div>
-                            <p class="text-white font-medium pl-7">E级 • Class-E</p>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-heart text-green-400"></i>
-                                <span class="text-sm text-gray-400">Status</span>
-                            </div>
-                            <p class="text-white font-medium pl-7">活跃 • Active</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 pt-6 border-t border-gray-700/50">
-                        <p class="text-gray-400 italic">
-                            "在代码的世界里探索，在观察中成长"
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 技能雷达图 -->
-            <div class="bento-card lg:col-span-2 lg:row-span-2">
-                <div class="flex items-start gap-6 mb-6">
-                    <div class="icon-wrapper gradient-purple">
-                        <i class="fas fa-chart-line text-white"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-4xl font-bold text-white mb-2">技能分布</h2>
-                        <p class="text-gray-400 text-sm tracking-wider">SKILL DISTRIBUTION</p>
-                    </div>
-                </div>
-                <div class="h-80">
-                    <canvas id="skillRadar"></canvas>
-                </div>
-            </div>
-
-            <!-- 观察数据统计 -->
-            <div class="bento-card">
-                <div class="icon-wrapper gradient-blue mb-6">
-                    <i class="fas fa-eye text-white"></i>
-                </div>
-                <h3 class="text-5xl font-black text-white mb-2">1,024</h3>
-                <p class="text-gray-400 text-sm tracking-wider">OBSERVATIONS</p>
-                <p class="text-lg font-medium text-white mt-1">观察记录</p>
-
-                <div class="mt-6">
-                    <svg width="100%" height="60" class="opacity-80">
-                        <polyline
-                            class="stat-line"
-                            fill="none"
-                            stroke="rgba(59, 130, 246, 0.8)"
-                            stroke-width="3"
-                            points="0,50 20,45 40,35 60,40 80,25 100,30 120,20 140,15"
-                            style="animation-delay: 0.2s"
-                        />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- 项目数量 -->
-            <div class="bento-card">
-                <div class="icon-wrapper gradient-purple mb-6">
-                    <i class="fas fa-folder-open text-white"></i>
-                </div>
-                <h3 class="text-5xl font-black text-white mb-2">42</h3>
-                <p class="text-gray-400 text-sm tracking-wider">PROJECTS</p>
-                <p class="text-lg font-medium text-white mt-1">完成项目</p>
-
-                <div class="mt-6">
-                    <svg width="100%" height="60" class="opacity-80">
-                        <polyline
-                            class="stat-line"
-                            fill="none"
-                            stroke="rgba(139, 92, 246, 0.8)"
-                            stroke-width="3"
-                            points="0,40 20,35 40,45 60,30 80,35 100,20 120,25 140,15"
-                            style="animation-delay: 0.4s"
-                        />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- 代码提交 -->
-            <div class="bento-card">
-                <div class="icon-wrapper gradient-pink mb-6">
-                    <i class="fas fa-code-branch text-white"></i>
-                </div>
-                <h3 class="text-5xl font-black text-white mb-2">8,192</h3>
-                <p class="text-gray-400 text-sm tracking-wider">COMMITS</p>
-                <p class="text-lg font-medium text-white mt-1">代码提交</p>
-
-                <div class="mt-6">
-                    <svg width="100%" height="60" class="opacity-80">
-                        <polyline
-                            class="stat-line"
-                            fill="none"
-                            stroke="rgba(236, 72, 153, 0.8)"
-                            stroke-width="3"
-                            points="0,45 20,40 40,30 60,35 80,20 100,25 120,15 140,10"
-                            style="animation-delay: 0.6s"
-                        />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- 学习时长 -->
-            <div class="bento-card">
-                <div class="icon-wrapper gradient-green mb-6">
-                    <i class="fas fa-clock text-white"></i>
-                </div>
-                <h3 class="text-5xl font-black text-white mb-2">365</h3>
-                <p class="text-gray-400 text-sm tracking-wider">DAYS</p>
-                <p class="text-lg font-medium text-white mt-1">持续学习</p>
-
-                <div class="mt-6">
-                    <svg width="100%" height="60" class="opacity-80">
-                        <polyline
-                            class="stat-line"
-                            fill="none"
-                            stroke="rgba(16, 185, 129, 0.8)"
-                            stroke-width="3"
-                            points="0,50 20,48 40,46 60,44 80,42 100,40 120,38 140,35"
-                            style="animation-delay: 0.8s"
-                        />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- 技术栈详情 - 跨2列 -->
-            <div class="bento-card lg:col-span-2">
-                <div class="flex items-start gap-6 mb-8">
-                    <div class="icon-wrapper gradient-orange">
-                        <i class="fas fa-layer-group text-white"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-4xl font-bold text-white mb-2">技术栈</h2>
-                        <p class="text-gray-400 text-sm tracking-wider">TECHNOLOGY STACK</p>
-                    </div>
-                </div>
-
-                <div class="space-y-6">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-white font-medium text-lg">前端开发</span>
-                            <span class="text-blue-400 text-sm">Frontend Development</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress gradient-blue" style="width: 0%" data-width="85%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-white font-medium text-lg">后端开发</span>
-                            <span class="text-purple-400 text-sm">Backend Development</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress gradient-purple" style="width: 0%" data-width="75%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-white font-medium text-lg">数据分析</span>
-                            <span class="text-pink-400 text-sm">Data Analysis</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress gradient-pink" style="width: 0%" data-width="70%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-white font-medium text-lg">UI/UX 设计</span>
-                            <span class="text-green-400 text-sm">UI/UX Design</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress gradient-green" style="width: 0%" data-width="65%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 工作流程图 -->
-            <div class="bento-card lg:col-span-2">
-                <div class="flex items-start gap-6 mb-8">
-                    <div class="icon-wrapper gradient-blue">
-                        <i class="fas fa-project-diagram text-white"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-4xl font-bold text-white mb-2">月度活跃度</h2>
-                        <p class="text-gray-400 text-sm tracking-wider">MONTHLY ACTIVITY</p>
-                    </div>
-                </div>
-                <div class="h-64">
-                    <canvas id="activityChart"></canvas>
-                </div>
-            </div>
-
-            <!-- 兴趣爱好 -->
-            <div class="bento-card lg:col-span-2">
-                <div class="flex items-start gap-6 mb-8">
-                    <div class="icon-wrapper gradient-pink">
-                        <i class="fas fa-heart text-white"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-4xl font-bold text-white mb-2">兴趣爱好</h2>
-                        <p class="text-gray-400 text-sm tracking-wider">INTERESTS & HOBBIES</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 hover:border-blue-500/40 transition-all">
-                        <i class="fas fa-code text-4xl text-blue-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">编程开发</h3>
-                        <p class="text-gray-400 text-sm">Coding</p>
-                    </div>
-
-                    <div class="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 hover:border-purple-500/40 transition-all">
-                        <i class="fas fa-book text-4xl text-purple-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">阅读学习</h3>
-                        <p class="text-gray-400 text-sm">Reading</p>
-                    </div>
-
-                    <div class="p-6 rounded-2xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20 hover:border-pink-500/40 transition-all">
-                        <i class="fas fa-mountain text-4xl text-pink-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">户外探索</h3>
-                        <p class="text-gray-400 text-sm">Outdoor</p>
-                    </div>
-
-                    <div class="p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-transparent border border-green-500/20 hover:border-green-500/40 transition-all">
-                        <i class="fas fa-camera text-4xl text-green-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">摄影记录</h3>
-                        <p class="text-gray-400 text-sm">Photography</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 联系方式 -->
-            <div class="bento-card lg:col-span-2">
-                <div class="flex items-start gap-6 mb-8">
-                    <div class="icon-wrapper gradient-green">
-                        <i class="fas fa-paper-plane text-white"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-4xl font-bold text-white mb-2">联系我</h2>
-                        <p class="text-gray-400 text-sm tracking-wider">GET IN TOUCH</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="mailto:hello@example.com" class="group p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <i class="fas fa-envelope text-blue-400 text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-medium">邮箱</p>
-                            <p class="text-gray-400 text-sm">Email</p>
-                        </div>
-                    </a>
-
-                    <a href="https://github.com" target="_blank" class="group p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 hover:border-purple-500/40 transition-all flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <i class="fab fa-github text-purple-400 text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-medium">GitHub</p>
-                            <p class="text-gray-400 text-sm">Code</p>
-                        </div>
-                    </a>
-
-                    <a href="https://twitter.com" target="_blank" class="group p-6 rounded-2xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20 hover:border-pink-500/40 transition-all flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <i class="fab fa-twitter text-pink-400 text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-medium">推特</p>
-                            <p class="text-gray-400 text-sm">Twitter</p>
-                        </div>
-                    </a>
-
-                    <a href="https://linkedin.com" target="_blank" class="group p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-transparent border border-green-500/20 hover:border-green-500/40 transition-all flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <i class="fab fa-linkedin text-green-400 text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-medium">领英</p>
-                            <p class="text-gray-400 text-sm">LinkedIn</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Footer -->
-        <div class="mt-16 text-center">
-            <div class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white/5 border border-white/10">
-                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                <p class="text-gray-400 text-sm">
-                    观察进行中 <span class="text-white font-medium ml-2">OBSERVING IN PROGRESS</span>
-                </p>
-            </div>
-            <p class="text-gray-600 text-sm mt-6">© 2024 菜狗 • Earth Class-E Observer</p>
-        </div>
+<body>
+    <!-- 加载动画 -->
+    <div class="app-loading" id="app-loading">
+        <div class="spinner"></div>
+        <p class="loading-text">Loading modules...</p>
     </div>
 
+    <!-- 导航栏容器 -->
+    <div id="navigation-container"></div>
+
+    <!-- 主内容区 -->
+    <main>
+        <!-- 英雄区容器 -->
+        <div id="hero-container"></div>
+
+        <!-- 搜索结果容器 -->
+        <div id="search-results-container"></div>
+    </main>
+
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 工具卡片模板容器 -->
+    <div id="tool-card-template-container"></div>
+
+    <!-- 全局脚本 - 按顺序加载 -->
+    <script src="./scripts/config.js"></script>
+    <script src="./scripts/utils.js"></script>
+    <script src="./scripts/template-loader.js"></script>
+
+    <!-- 初始化脚本 -->
     <script>
-        // 技能雷达图
-        const radarCtx = document.getElementById('skillRadar').getContext('2d');
-        new Chart(radarCtx, {
-            type: 'radar',
-            data: {
-                labels: ['编程', 'Programming', '设计', 'Design', '分析', 'Analysis'],
-                datasets: [{
-                    label: '技能等级',
-                    data: [85, 75, 70, 65, 80, 72],
-                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                    borderColor: 'rgba(139, 92, 246, 0.8)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(139, 92, 246, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(139, 92, 246, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20,
-                            color: 'rgba(255, 255, 255, 0.3)',
-                            backdropColor: 'transparent'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        pointLabels: {
-                            color: 'rgba(255, 255, 255, 0.7)',
-                            font: {
-                                size: 13,
-                                family: "'Noto Sans SC', 'Inter', sans-serif"
-                            }
-                        }
+        /**
+         * 模板加载器 - 内联版本（确保定义）
+         */
+        class TemplateLoader {
+            constructor() {
+                this.templates = new Map();
+                this.loadedCount = 0;
+                this.totalCount = 0;
+            }
+
+            async loadTemplate(url, containerId) {
+                try {
+                    console.log(`Loading template: ${url}`);
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load ${url}: ${response.status}`);
                     }
-                },
-                plugins: {
-                    legend: {
-                        display: false
+
+                    const html = await response.text();
+                    const container = document.getElementById(containerId);
+
+                    if (!container) {
+                        throw new Error(`Container #${containerId} not found`);
                     }
+
+                    container.innerHTML = html;
+                    this.templates.set(containerId, html);
+                    this.loadedCount++;
+
+                    console.log(`✓ Loaded: ${url}`);
+                    return true;
+                } catch (error) {
+                    console.error(`✗ Error loading template from ${url}:`, error);
+                    return false;
                 }
             }
-        });
 
-        // 月度活跃度图表
-        const activityCtx = document.getElementById('activityChart').getContext('2d');
-        new Chart(activityCtx, {
-            type: 'bar',
-            data: {
-                labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                datasets: [{
-                    label: '活跃天数',
-                    data: [22, 25, 28, 26, 30, 29, 27, 31, 28, 26, 29, 30],
-                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 2,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 31,
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.5)',
-                            font: {
-                                family: "'Noto Sans SC', 'Inter', sans-serif"
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.05)'
-                        }
+            async loadTemplates(templateConfigs) {
+                this.totalCount = templateConfigs.length;
+                this.loadedCount = 0;
+
+                const promises = templateConfigs.map(config =>
+                    this.loadTemplate(config.url, config.containerId)
+                );
+
+                return Promise.all(promises);
+            }
+
+            getProgress() {
+                return {
+                    loaded: this.loadedCount,
+                    total: this.totalCount,
+                    percentage: this.totalCount > 0 ? (this.loadedCount / this.totalCount) * 100 : 0
+                };
+            }
+        }
+
+        /**
+         * 应用初始化
+         */
+        (async function initApp() {
+            try {
+                console.log('🚀 Starting HappyPuppy.ai initialization...');
+
+                // 1. 创建模板加载器
+                const loader = new TemplateLoader();
+
+                // 2. 定义模板配置 - 使用相对路径
+                const templates = [
+                    {
+                        url: './modules/navigation/navigation.html',
+                        containerId: 'navigation-container'
                     },
-                    x: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.5)',
-                            font: {
-                                family: "'Noto Sans SC', 'Inter', sans-serif"
-                            }
-                        },
-                        grid: {
-                            display: false
-                        }
+                    {
+                        url: './modules/hero/hero.html',
+                        containerId: 'hero-container'
+                    },
+                    {
+                        url: './modules/search-results/search-results.html',
+                        containerId: 'search-results-container'
+                    },
+                    {
+                        url: './modules/footer/footer.html',
+                        containerId: 'footer-container'
+                    },
+                    {
+                        url: './modules/tool-card/tool-card.html',
+                        containerId: 'tool-card-template-container'
                     }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+                ];
+
+                // 3. 加载所有模板
+                console.log('📄 Loading templates...');
+                const results = await loader.loadTemplates(templates);
+
+                const allLoaded = results.every(result => result === true);
+                if (!allLoaded) {
+                    console.warn('⚠️  Some templates failed to load');
+                    const failed = results.reduce((acc, result, index) => {
+                        if (!result) acc.push(templates[index].url);
+                        return acc;
+                    }, []);
+                    console.error('Failed templates:', failed);
+                }
+
+                console.log('✓ Templates loaded successfully');
+
+                // 4. 动态加载模块脚本
+                console.log('📦 Loading module scripts...');
+                await loadModuleScripts();
+
+                console.log('✓ Module scripts loaded');
+
+                // 5. 等待一小段时间确保所有模块初始化
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                // 6. 隐藏加载动画
+                hideLoading();
+
+                console.log('✅ HappyPuppy.ai initialized successfully!');
+
+            } catch (error) {
+                console.error('❌ Failed to initialize app:', error);
+                hideLoading();
+                showError('应用加载失败，请刷新页面重试');
+            }
+        })();
+
+        /**
+         * 动态加载模块脚本
+         */
+        async function loadModuleScripts() {
+            const scripts = [
+                './modules/navigation/navigation.js',
+                './modules/hero/hero.js',
+                './modules/tool-card/tool-card.js',
+                './modules/search-results/search-results.js',
+                './modules/footer/footer.js',
+                './scripts/main.js'
+            ];
+
+            // 按顺序加载脚本
+            for (const src of scripts) {
+                try {
+                    await loadScript(src);
+                } catch (error) {
+                    console.error(`Failed to load script: ${src}`, error);
+                    // 继续加载其他脚本
                 }
             }
-        });
+        }
 
-        // 技能进度条动画
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.querySelectorAll('.skill-progress').forEach(bar => {
-                    bar.style.width = bar.dataset.width;
-                });
-            }, 500);
-        });
-
-        // 滚动动画
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+        /**
+         * 加载单个脚本
+         */
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => {
+                    console.log(`  ✓ Loaded: ${src}`);
+                    resolve();
+                };
+                script.onerror = () => {
+                    console.error(`  ✗ Failed to load: ${src}`);
+                    reject(new Error(`Failed to load script: ${src}`));
+                };
+                document.body.appendChild(script);
             });
-        }, observerOptions);
+        }
 
-        document.querySelectorAll('.bento-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
+        /**
+         * 隐藏加载动画
+         */
+        function hideLoading() {
+            const loading = document.getElementById('app-loading');
+            if (loading) {
+                loading.classList.add('hidden');
+                setTimeout(() => {
+                    loading.remove();
+                }, 300);
+            }
+        }
+
+        /**
+         * 显示错误信息
+         */
+        function showError(message) {
+            const loading = document.getElementById('app-loading');
+            if (loading) {
+                loading.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fa-solid fa-exclamation-triangle" style="font-size: 3rem; color: #EF4444; margin-bottom: 1rem;"></i>
+                        <p style="color: #FFFFFF; font-size: 1.125rem; margin-bottom: 0.5rem; font-weight: 700;">${message}</p>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.875rem; margin-bottom: 1.5rem;">请检查浏览器控制台获取详细错误信息</p>
+                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #3B82F6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">
+                            <i class="fa-solid fa-rotate-right" style="margin-right: 0.5rem;"></i>
+                            刷新页面
+                        </button>
+                    </div>
+                `;
+            }
+        }
     </script>
 </body>
 </html>

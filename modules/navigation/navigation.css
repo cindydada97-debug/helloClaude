@@ -1,0 +1,395 @@
+/* ==========================================================================
+   导航栏样式 (Navigation Styles)
+   用途: 顶部固定导航、分类链接、Logo展示
+   依赖: TailwindCSS (基础样式), Font Awesome (图标)
+   ========================================================================== */
+
+/**
+ * 导航栏容器
+ * - 固定在页面顶部
+ * - 玻璃态效果（半透明背景 + 背景模糊）
+ * - 响应式padding
+ */
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 2rem;
+  transition: all 0.3s ease;
+}
+
+/**
+ * 导航栏内部容器
+ * - Flex布局，三区域分布（左中右）
+ * - 最大宽度限制，居中显示
+ */
+.navigation__container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* ==========================================================================
+   Logo区域
+   ========================================================================== */
+
+/**
+ * Logo容器
+ * - 左侧对齐
+ * - 包含图标和文字
+ */
+.navigation__logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.8;
+}
+
+/**
+ * Logo图标（临时方案：使用Font Awesome）
+ */
+.logo-icon-temp {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  color: #60A5FA;
+  font-size: 20px;
+}
+
+/**
+ * Logo文字
+ * - 中文粗体大字
+ * - 英文细体小字装饰
+ */
+.logo-text h1 {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.logo-text span {
+  font-size: 0.625rem; /* 10px */
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+}
+
+/* ==========================================================================
+   分类导航
+   ========================================================================== */
+
+/**
+ * 分类列表
+ * - 水平布局
+ * - 居中显示
+ */
+.navigation__categories {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+/**
+ * 分类链接
+ * - 垂直布局（中文 + 英文）
+ * - 默认半透明白色
+ * - Hover时完全不透明
+ */
+.category-link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
+  padding: 0.5rem 0;
+}
+
+.category-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/**
+ * 分类中文名称
+ * - 粗体
+ */
+.category-name {
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/**
+ * 分类英文名称
+ * - 细体、小字、大写
+ */
+.category-name-en {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+/**
+ * Active状态下划线
+ * - 对应分类颜色
+ * - 从中心向两侧展开动画
+ */
+.category-link--active::after,
+.category-link:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 2px;
+  background: var(--category-color);
+  transition: transform 0.3s ease;
+}
+
+.category-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 100%;
+  height: 2px;
+  transition: transform 0.3s ease;
+}
+
+.category-link:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.category-link--active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* 分类颜色映射 */
+.category-link[data-color="blue"] {
+  --category-color: #3B82F6;
+}
+
+.category-link[data-color="green"] {
+  --category-color: #10B981;
+}
+
+.category-link[data-color="purple"] {
+  --category-color: #8B5CF6;
+}
+
+.category-link[data-color="orange"] {
+  --category-color: #F59E0B;
+}
+
+.category-link[data-color="pink"] {
+  --category-color: #EC4899;
+}
+
+/* ==========================================================================
+   右侧操作区
+   ========================================================================== */
+
+.navigation__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/**
+ * 搜索按钮
+ */
+.search-trigger {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-trigger:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/**
+ * 汉堡菜单（移动端）
+ * - 默认隐藏
+ * - 平板及以下显示
+ */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hamburger-line {
+  width: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu:hover .hamburger-line {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* 汉堡菜单激活状态（X形） */
+.hamburger-menu.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ==========================================================================
+   响应式适配
+   ========================================================================== */
+
+/* 平板及以下 (< 1024px) */
+@media (max-width: 1024px) {
+  .navigation__categories {
+    gap: 1.5rem;
+  }
+
+  .category-name {
+    font-size: 0.875rem; /* 14px */
+  }
+
+  .category-name-en {
+    font-size: 0.625rem; /* 10px */
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .navigation {
+    padding: 0.875rem 1rem;
+  }
+
+  /* 隐藏分类导航，显示汉堡菜单 */
+  .navigation__categories {
+    position: fixed;
+    top: 72px; /* 导航栏高度 */
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .navigation__categories.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .navigation__categories li {
+    width: 100%;
+  }
+
+  .category-link {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .category-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  /* Logo文字缩小 */
+  .logo-text h1 {
+    font-size: 1rem; /* 16px */
+  }
+
+  .logo-text span {
+    font-size: 0.5rem; /* 8px */
+  }
+}
+
+/* 小屏手机 (< 640px) */
+@media (max-width: 640px) {
+  .logo-icon-temp {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .search-trigger,
+  .hamburger-menu {
+    width: 36px;
+    height: 36px;
+  }
+}

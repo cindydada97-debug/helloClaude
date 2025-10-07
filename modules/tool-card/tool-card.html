@@ -1,0 +1,47 @@
+<!-- 工具卡片组件模板 -->
+<template id="tool-card-template">
+  <article class="tool-card" data-tool-id="" data-category="">
+    <!-- 背景渐变光晕 -->
+    <div class="tool-card__glow"></div>
+
+    <!-- 卡片内容 -->
+    <div class="tool-card__content">
+      <!-- 工具图标区域 -->
+      <div class="tool-card__header">
+        <div class="tool-card__icon">
+          <img src="" alt="" loading="lazy" class="tool-icon-img">
+        </div>
+      </div>
+
+      <!-- 工具信息区域 -->
+      <div class="tool-card__info">
+        <!-- 标题组 -->
+        <div class="tool-card__title-group">
+          <h3 class="tool-card__title"></h3>
+          <p class="tool-card__subtitle"></p>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="tool-card__meta">
+          <span class="tool-card__category">
+            <i class="tool-category-icon"></i>
+            <span class="tool-category-name"></span>
+          </span>
+        </div>
+
+        <!-- 描述 -->
+        <p class="tool-card__description"></p>
+
+        <!-- 标签组 -->
+        <div class="tool-card__tags">
+          <!-- 动态生成标签 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Hover箭头 -->
+    <div class="tool-card__arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </article>
+</template>
