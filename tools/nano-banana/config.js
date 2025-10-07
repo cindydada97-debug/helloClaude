@@ -14,8 +14,8 @@ const NANO_BANANA_CONFIG = {
   MODEL: 'google/gemini-2.5-flash-image-preview',
 
   // 网站信息（用于 OpenRouter 排名）
-  SITE_URL: 'http://localhost:8000',
-  SITE_NAME: 'Nano Banana - HappyPuppy.ai',
+  // SITE_URL: 'http://localhost:8000',
+  // SITE_NAME: 'Nano Banana - HappyPuppy.ai',
 
   // 请求配置
   MAX_TOKENS: 1000,
