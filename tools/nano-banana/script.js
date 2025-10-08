@@ -1,22 +1,3 @@
-// DOM Elements
-const dropZone = document.getElementById("dropZone")
-const fileInput = document.getElementById("fileInput")
-const uploadPrompt = document.getElementById("uploadPrompt")
-const imagePreviewContainer = document.getElementById("imagePreviewContainer")
-const imageCount = document.getElementById("imageCount")
-const imageUploadSection = document.getElementById("imageUploadSection")
-
-// Mode Selection Elements
-const modeImageToImage = document.getElementById("modeImageToImage")
-const modeTextToImage = document.getElementById("modeTextToImage")
-
-// Prompt and Output Elements
-const mainPrompt = document.getElementById("mainPrompt")
-const generateBtn = document.getElementById("generateBtn")
-const outputArea = document.getElementById("outputArea")
-const generatedImage = document.getElementById("generatedImage")
-const resultImg = document.getElementById("resultImg")
-
 // 检测是否为移动设备
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
@@ -30,23 +11,37 @@ let uploadedImages = []
 // 当前模式：'image-to-image' 或 'text-to-image'
 let currentMode = 'image-to-image'
 
-// 初始化检查 - 验证所有必要元素是否正确加载
-function checkInitialization() {
-  console.log('🔍 开始初始化检查...')
+// DOM Elements - 将在初始化函数中赋值
+let dropZone, fileInput, uploadPrompt, imagePreviewContainer, imageCount, imageUploadSection
+let modeImageToImage, modeTextToImage
+let mainPrompt, generateBtn, outputArea, generatedImage, resultImg
 
+// 主初始化函数 - 在 DOM 加载完成后执行
+function initNanoBanana() {
+  console.log('🚀 开始初始化 Nano Banana...')
+
+  // 获取所有 DOM 元素
+  dropZone = document.getElementById("dropZone")
+  fileInput = document.getElementById("fileInput")
+  uploadPrompt = document.getElementById("uploadPrompt")
+  imagePreviewContainer = document.getElementById("imagePreviewContainer")
+  imageCount = document.getElementById("imageCount")
+  imageUploadSection = document.getElementById("imageUploadSection")
+
+  modeImageToImage = document.getElementById("modeImageToImage")
+  modeTextToImage = document.getElementById("modeTextToImage")
+
+  mainPrompt = document.getElementById("mainPrompt")
+  generateBtn = document.getElementById("generateBtn")
+  outputArea = document.getElementById("outputArea")
+  generatedImage = document.getElementById("generatedImage")
+  resultImg = document.getElementById("resultImg")
+
+  // 检查所有元素是否正确加载
   const elements = {
-    'dropZone': dropZone,
-    'fileInput': fileInput,
-    'uploadPrompt': uploadPrompt,
-    'imagePreviewContainer': imagePreviewContainer,
-    'imageCount': imageCount,
-    'imageUploadSection': imageUploadSection,
-    'modeImageToImage': modeImageToImage,
-    'modeTextToImage': modeTextToImage,
-    'mainPrompt': mainPrompt,
-    'generateBtn': generateBtn,
-    'outputArea': outputArea,
-    'generatedImage': generatedImage
+    dropZone, fileInput, uploadPrompt, imagePreviewContainer, imageCount, imageUploadSection,
+    modeImageToImage, modeTextToImage,
+    mainPrompt, generateBtn, outputArea, generatedImage
   }
 
   let allGood = true
@@ -59,93 +54,205 @@ function checkInitialization() {
     }
   }
 
-  if (allGood) {
-    console.log('✅ 所有元素初始化成功！')
-  } else {
-    console.error('❌ 部分元素初始化失败，请检查 HTML 结构')
+  if (!allGood) {
+    console.error('❌ 部分元素初始化失败，终止初始化')
+    return
   }
 
-  return allGood
-}
+  console.log('✅ 所有元素初始化成功！')
 
-// 页面加载完成后执行初始化检查
-document.addEventListener('DOMContentLoaded', () => {
-  checkInitialization()
-})
-
-// 如果 DOM 已经加载完成，立即执行
-if (document.readyState === 'loading') {
-  console.log('⏳ 等待 DOM 加载完成...')
-} else {
-  checkInitialization()
-}
-
-// 根据设备类型更新提示文字
-if (isMobile) {
-  const hintText = uploadPrompt.querySelector('.text-xs')
-  if (hintText) {
-    hintText.textContent = '点击选择图片或拍照'
+  // 根据设备类型更新提示文字
+  if (isMobile) {
+    const hintText = uploadPrompt.querySelector('.text-xs')
+    if (hintText) {
+      hintText.textContent = '点击选择图片或拍照'
+    }
   }
+
+  // 绑定所有事件监听器
+  bindEventListeners()
+
+  console.log('✅ Nano Banana 初始化完成！')
 }
 
-// Click to upload (移动端和桌面端都支持)
-dropZone.addEventListener("click", () => {
-  console.log('🖱️ dropZone 点击事件触发')
-  console.log('📊 当前已上传图片数:', uploadedImages.length)
+// 绑定所有事件监听器
+function bindEventListeners() {
+  console.log('🔗 开始绑定事件监听器...')
 
-  if (uploadedImages.length < MAX_IMAGES) {
-    console.log('✅ 触发文件选择器')
-    fileInput.click()
-  } else {
-    console.log('⚠️ 已达到最大上传数量')
-    alert(`最多只能上传${MAX_IMAGES}张图片`)
+  // Click to upload (移动端和桌面端都支持)
+  dropZone.addEventListener("click", () => {
+    console.log('🖱️ dropZone 点击事件触发')
+    console.log('📊 当前已上传图片数:', uploadedImages.length)
+
+    if (uploadedImages.length < MAX_IMAGES) {
+      console.log('✅ 触发文件选择器')
+      fileInput.click()
+    } else {
+      console.log('⚠️ 已达到最大上传数量')
+      alert(`最多只能上传${MAX_IMAGES}张图片`)
+    }
+  })
+
+  // 移动端触摸反馈
+  if (isMobile) {
+    dropZone.addEventListener("touchstart", (e) => {
+      dropZone.classList.add("bg-banana-100")
+    })
+
+    dropZone.addEventListener("touchend", (e) => {
+      dropZone.classList.remove("bg-banana-100")
+    })
+
+    dropZone.addEventListener("touchcancel", (e) => {
+      dropZone.classList.remove("bg-banana-100")
+    })
   }
-})
 
-// 移动端触摸反馈
-if (isMobile) {
-  dropZone.addEventListener("touchstart", (e) => {
-    dropZone.classList.add("bg-banana-100")
-  })
-
-  dropZone.addEventListener("touchend", (e) => {
-    dropZone.classList.remove("bg-banana-100")
-  })
-
-  dropZone.addEventListener("touchcancel", (e) => {
-    dropZone.classList.remove("bg-banana-100")
-  })
-}
-
-// File input change (移动端和桌面端都支持) - 支持多选
-fileInput.addEventListener("change", (e) => {
-  console.log('📂 fileInput change 事件触发')
-  console.log('📂 选中的文件:', e.target.files)
-  const files = Array.from(e.target.files)
-  console.log('📂 转换后的文件数组:', files)
-  handleFiles(files)
-  fileInput.value = "" // 清空input，允许重复选择相同文件
-})
-
-// Drag and drop (仅桌面端) - 支持多张图片
-if (!isMobile) {
-  dropZone.addEventListener("dragover", (e) => {
-    e.preventDefault()
-    dropZone.classList.add("border-banana-500", "bg-banana-100")
-  })
-
-  dropZone.addEventListener("dragleave", (e) => {
-    e.preventDefault()
-    dropZone.classList.remove("border-banana-500", "bg-banana-100")
-  })
-
-  dropZone.addEventListener("drop", (e) => {
-    e.preventDefault()
-    dropZone.classList.remove("border-banana-500", "bg-banana-100")
-
-    const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith("image/"))
+  // File input change (移动端和桌面端都支持) - 支持多选
+  fileInput.addEventListener("change", (e) => {
+    console.log('📂 fileInput change 事件触发')
+    console.log('📂 选中的文件:', e.target.files)
+    const files = Array.from(e.target.files)
+    console.log('📂 转换后的文件数组:', files)
     handleFiles(files)
+    fileInput.value = "" // 清空input，允许重复选择相同文件
   })
+
+  // Drag and drop (仅桌面端) - 支持多张图片
+  if (!isMobile) {
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault()
+      dropZone.classList.add("border-banana-500", "bg-banana-100")
+    })
+
+    dropZone.addEventListener("dragleave", (e) => {
+      e.preventDefault()
+      dropZone.classList.remove("border-banana-500", "bg-banana-100")
+    })
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault()
+      dropZone.classList.remove("border-banana-500", "bg-banana-100")
+
+      const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith("image/"))
+      handleFiles(files)
+    })
+  }
+
+  // 桌面端和移动端都支持 click 事件
+  modeImageToImage.addEventListener("click", switchToImageToImageMode)
+  modeTextToImage.addEventListener("click", switchToTextToImageMode)
+
+  // 移动端额外添加触摸反馈
+  if (isMobile) {
+    // Image to Image 按钮触摸反馈
+    modeImageToImage.addEventListener("touchstart", (e) => {
+      if (currentMode !== 'image-to-image') {
+        modeImageToImage.classList.add("bg-banana-100")
+      }
+    })
+    modeImageToImage.addEventListener("touchend", (e) => {
+      modeImageToImage.classList.remove("bg-banana-100")
+    })
+    modeImageToImage.addEventListener("touchcancel", (e) => {
+      modeImageToImage.classList.remove("bg-banana-100")
+    })
+
+    // Text to Image 按钮触摸反馈
+    modeTextToImage.addEventListener("touchstart", (e) => {
+      if (currentMode !== 'text-to-image') {
+        modeTextToImage.classList.add("bg-banana-100")
+      }
+    })
+    modeTextToImage.addEventListener("touchend", (e) => {
+      modeTextToImage.classList.remove("bg-banana-100")
+    })
+    modeTextToImage.addEventListener("touchcancel", (e) => {
+      modeTextToImage.classList.remove("bg-banana-100")
+    })
+  }
+
+  // 移动端 Generate 按钮触摸反馈
+  if (isMobile) {
+    generateBtn.addEventListener("touchstart", (e) => {
+      if (!generateBtn.disabled) {
+        generateBtn.style.transform = "scale(0.98)"
+      }
+    })
+    generateBtn.addEventListener("touchend", (e) => {
+      generateBtn.style.transform = "scale(1)"
+    })
+    generateBtn.addEventListener("touchcancel", (e) => {
+      generateBtn.style.transform = "scale(1)"
+    })
+  }
+
+  generateBtn.addEventListener("click", async () => {
+    const prompt = mainPrompt.value.trim()
+    const hasImages = uploadedImages.length > 0
+
+    if (!prompt) {
+      alert("请输入提示词 / Please enter a prompt")
+      return
+    }
+
+    // 根据模式判断是否需要图片
+    if (currentMode === 'image-to-image' && !hasImages) {
+      alert("请先上传图片 / Please upload at least one image")
+      return
+    }
+
+    // 显示加载状态
+    generateBtn.innerHTML = "⏳ Generating..."
+    generateBtn.disabled = true
+
+    const loadingMessage = currentMode === 'text-to-image'
+      ? 'AI 正在根据您的描述生成图片...'
+      : `AI 正在处理您的 ${uploadedImages.length} 张图片...`
+
+    outputArea.innerHTML = `
+      <div class="flex flex-col items-center justify-center">
+        <div class="w-16 h-16 border-4 border-banana-200 border-t-banana-500 rounded-full animate-spin mb-4"></div>
+        <p class="text-gray-600 font-medium">${loadingMessage}</p>
+        <p class="text-gray-400 text-sm mt-2">这可能需要 10-30 秒</p>
+      </div>
+    `
+
+    try {
+      console.log('🚀 开始调用 Gemini API...')
+      console.log('📝 Mode:', currentMode)
+      console.log('📝 Prompt:', prompt)
+
+      let result
+      if (currentMode === 'text-to-image') {
+        // Text to Image 模式
+        console.log('🎨 Text to Image 模式')
+        result = await callTextToImageAPI(prompt)
+      } else {
+        // Image to Image 模式
+        console.log('🖼️ Images count:', uploadedImages.length)
+        const firstImage = uploadedImages[0].base64
+        console.log('🖼️ Image size:', firstImage.length, 'bytes')
+        result = await callGeminiAPI(firstImage, prompt)
+      }
+
+      console.log('✅ API 返回结果:', result)
+
+      // 显示生成结果
+      displayResult(result)
+
+    } catch (error) {
+      console.error('❌ API Error:', error)
+      console.error('Error details:', error.stack)
+      showError(error.message || '未知错误，请查看控制台')
+    } finally {
+      // 恢复按钮状态
+      generateBtn.innerHTML = "⚡ Generate Now"
+      generateBtn.disabled = false
+    }
+  })
+
+  console.log('✅ 所有事件监听器绑定完成')
 }
 
 // Handle multiple files upload
@@ -249,8 +356,20 @@ window.debugNanoBanana = function() {
     name: img.name,
     size: img.base64.length + ' bytes'
   })))
-  console.log('👁️ 图片上传区域可见性:', !imageUploadSection.classList.contains('hidden'))
-  console.log('👁️ 图片预览容器可见性:', !imagePreviewContainer.classList.contains('hidden'))
+
+  // 详细的可见性检查
+  const uploadSectionVisible = !imageUploadSection.classList.contains('hidden') && imageUploadSection.style.display !== 'none'
+  const previewVisible = !imagePreviewContainer.classList.contains('hidden')
+
+  console.log('👁️ 图片上传区域状态:')
+  console.log('   - classList contains "hidden":', imageUploadSection.classList.contains('hidden'))
+  console.log('   - style.display:', imageUploadSection.style.display || '(未设置)')
+  console.log('   - 实际可见:', uploadSectionVisible)
+
+  console.log('👁️ 图片预览容器状态:')
+  console.log('   - classList contains "hidden":', imagePreviewContainer.classList.contains('hidden'))
+  console.log('   - 实际可见:', previewVisible)
+
   console.log('📝 Main Prompt 值:', mainPrompt.value)
   console.log('📝 Main Prompt Placeholder:', mainPrompt.placeholder)
   console.log('🔍 ========================================')
@@ -326,119 +445,6 @@ function switchToTextToImageMode() {
   resetGeneration()
   console.log('✅ 已重置 output gallery')
 }
-
-// 桌面端和移动端都支持 click 事件
-modeImageToImage.addEventListener("click", switchToImageToImageMode)
-modeTextToImage.addEventListener("click", switchToTextToImageMode)
-
-// 移动端额外添加触摸反馈
-if (isMobile) {
-  // Image to Image 按钮触摸反馈
-  modeImageToImage.addEventListener("touchstart", (e) => {
-    if (currentMode !== 'image-to-image') {
-      modeImageToImage.classList.add("bg-banana-100")
-    }
-  })
-  modeImageToImage.addEventListener("touchend", (e) => {
-    modeImageToImage.classList.remove("bg-banana-100")
-  })
-  modeImageToImage.addEventListener("touchcancel", (e) => {
-    modeImageToImage.classList.remove("bg-banana-100")
-  })
-
-  // Text to Image 按钮触摸反馈
-  modeTextToImage.addEventListener("touchstart", (e) => {
-    if (currentMode !== 'text-to-image') {
-      modeTextToImage.classList.add("bg-banana-100")
-    }
-  })
-  modeTextToImage.addEventListener("touchend", (e) => {
-    modeTextToImage.classList.remove("bg-banana-100")
-  })
-  modeTextToImage.addEventListener("touchcancel", (e) => {
-    modeTextToImage.classList.remove("bg-banana-100")
-  })
-}
-
-// 移动端 Generate 按钮触摸反馈
-if (isMobile) {
-  generateBtn.addEventListener("touchstart", (e) => {
-    if (!generateBtn.disabled) {
-      generateBtn.style.transform = "scale(0.98)"
-    }
-  })
-  generateBtn.addEventListener("touchend", (e) => {
-    generateBtn.style.transform = "scale(1)"
-  })
-  generateBtn.addEventListener("touchcancel", (e) => {
-    generateBtn.style.transform = "scale(1)"
-  })
-}
-
-generateBtn.addEventListener("click", async () => {
-  const prompt = mainPrompt.value.trim()
-  const hasImages = uploadedImages.length > 0
-
-  if (!prompt) {
-    alert("请输入提示词 / Please enter a prompt")
-    return
-  }
-
-  // 根据模式判断是否需要图片
-  if (currentMode === 'image-to-image' && !hasImages) {
-    alert("请先上传图片 / Please upload at least one image")
-    return
-  }
-
-  // 显示加载状态
-  generateBtn.innerHTML = "⏳ Generating..."
-  generateBtn.disabled = true
-
-  const loadingMessage = currentMode === 'text-to-image'
-    ? 'AI 正在根据您的描述生成图片...'
-    : `AI 正在处理您的 ${uploadedImages.length} 张图片...`
-
-  outputArea.innerHTML = `
-    <div class="flex flex-col items-center justify-center">
-      <div class="w-16 h-16 border-4 border-banana-200 border-t-banana-500 rounded-full animate-spin mb-4"></div>
-      <p class="text-gray-600 font-medium">${loadingMessage}</p>
-      <p class="text-gray-400 text-sm mt-2">这可能需要 10-30 秒</p>
-    </div>
-  `
-
-  try {
-    console.log('🚀 开始调用 Gemini API...')
-    console.log('📝 Mode:', currentMode)
-    console.log('📝 Prompt:', prompt)
-
-    let result
-    if (currentMode === 'text-to-image') {
-      // Text to Image 模式
-      console.log('🎨 Text to Image 模式')
-      result = await callTextToImageAPI(prompt)
-    } else {
-      // Image to Image 模式
-      console.log('🖼️ Images count:', uploadedImages.length)
-      const firstImage = uploadedImages[0].base64
-      console.log('🖼️ Image size:', firstImage.length, 'bytes')
-      result = await callGeminiAPI(firstImage, prompt)
-    }
-
-    console.log('✅ API 返回结果:', result)
-
-    // 显示生成结果
-    displayResult(result)
-
-  } catch (error) {
-    console.error('❌ API Error:', error)
-    console.error('Error details:', error.stack)
-    showError(error.message || '未知错误，请查看控制台')
-  } finally {
-    // 恢复按钮状态
-    generateBtn.innerHTML = "⚡ Generate Now"
-    generateBtn.disabled = false
-  }
-})
 
 /**
  * 调用 Text to Image API (Gemini 2.5 Flash Image - Nano Banana)
@@ -571,19 +577,13 @@ async function callGeminiAPI(imageBase64, promptText) {
 function displayResult(resultImages) {
   console.log('🎨 开始显示结果...')
   console.log('📝 结果文本:', resultImages)
-  // console.log('🖼️ 原图 base64 长度:', uploadedImageBase64?.length)
 
   outputArea.classList.add("hidden")
   generatedImage.classList.remove("hidden")
 
   console.log('✅ 已隐藏 outputArea，显示 generatedImage')
 
-  // 检查返回的内容是否包含图片 URL
-  // Gemini 通常返回文本描述，我们显示文本结果和原图
   const resultContainer = document.getElementById("generatedImage")
-
-  // 检查返回结果是否包含图片URL（某些模型可能返回图片链接）
-  // const imageUrlMatch = resultText.match(/https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp)/i)
 
   if (resultImages) {
     // 如果返回的是图片URL，显示图片（居中）
@@ -631,10 +631,10 @@ function displayResult(resultImages) {
         <!-- 操作按钮 -->
         <div class="flex gap-4">
           <button onclick="copyResult()" class="px-6 py-3 bg-banana-500 text-white rounded-lg hover:bg-banana-600 transition font-medium shadow-md">
-            <i class="fa-solid fa-copy mr-2"></i>复制结果
+            复制结果
           </button>
           <button onclick="resetGeneration()" class="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">
-            <i class="fa-solid fa-rotate-right mr-2"></i>重新生成
+            重新生成
           </button>
         </div>
       </div>
@@ -654,12 +654,12 @@ function showError(errorMessage) {
   outputArea.innerHTML = `
     <div class="flex flex-col items-center justify-center text-center py-8">
       <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4">
-        <i class="fa-solid fa-exclamation-triangle text-4xl text-red-500"></i>
+        <span class="text-4xl">⚠️</span>
       </div>
       <h3 class="text-xl font-bold text-gray-900 mb-2">生成失败</h3>
       <p class="text-gray-600 max-w-md mb-4">${escapeHtml(errorMessage)}</p>
       <button onclick="location.reload()" class="px-6 py-2 bg-banana-500 text-white rounded-lg hover:bg-banana-600 transition">
-        <i class="fa-solid fa-rotate-right mr-2"></i>刷新页面重试
+        刷新页面重试
       </button>
     </div>
   `
@@ -675,16 +675,6 @@ function escapeHtml(text) {
 }
 
 /**
- * 下载上传的原图 - depreacted
- */
-function downloadImage() {
-  const link = document.createElement('a')
-  // link.href = uploadedImageBase64
-  link.download = `nano-banana-${Date.now()}.png`
-  link.click()
-}
-
-/*
  * 下载生成的图片
  */
 function downloadGeneratedImage(imageUrl) {
@@ -736,44 +726,63 @@ function resetGeneration() {
 }
 
 // FAQ Accordion
-const faqButtons = document.querySelectorAll(".faq-button")
+function initFAQ() {
+  const faqButtons = document.querySelectorAll(".faq-button")
 
-faqButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const content = button.nextElementSibling
-    const icon = button.querySelector(".faq-icon")
+  faqButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const content = button.nextElementSibling
+      const icon = button.querySelector(".faq-icon")
 
-    // Close all other FAQs
-    faqButtons.forEach((otherButton) => {
-      if (otherButton !== button) {
-        const otherContent = otherButton.nextElementSibling
-        const otherIcon = otherButton.querySelector(".faq-icon")
-        otherContent.classList.add("hidden")
-        otherIcon.textContent = "+"
+      // Close all other FAQs
+      faqButtons.forEach((otherButton) => {
+        if (otherButton !== button) {
+          const otherContent = otherButton.nextElementSibling
+          const otherIcon = otherButton.querySelector(".faq-icon")
+          otherContent.classList.add("hidden")
+          otherIcon.textContent = "+"
+        }
+      })
+
+      // Toggle current FAQ
+      if (content.classList.contains("hidden")) {
+        content.classList.remove("hidden")
+        icon.textContent = "−"
+      } else {
+        content.classList.add("hidden")
+        icon.textContent = "+"
       }
     })
-
-    // Toggle current FAQ
-    if (content.classList.contains("hidden")) {
-      content.classList.remove("hidden")
-      icon.textContent = "−"
-    } else {
-      content.classList.add("hidden")
-      icon.textContent = "+"
-    }
   })
-})
+}
 
 // Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault()
-    const target = document.querySelector(this.getAttribute("href"))
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
-    }
+function initSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault()
+      const target = document.querySelector(this.getAttribute("href"))
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+    })
   })
-})
+}
+
+// 页面加载完成后执行初始化
+if (document.readyState === 'loading') {
+  console.log('⏳ 等待 DOM 加载完成...')
+  document.addEventListener('DOMContentLoaded', () => {
+    initNanoBanana()
+    initFAQ()
+    initSmoothScroll()
+  })
+} else {
+  console.log('✅ DOM 已加载，立即初始化')
+  initNanoBanana()
+  initFAQ()
+  initSmoothScroll()
+}
