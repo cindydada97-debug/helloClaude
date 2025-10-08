@@ -2,12 +2,23 @@
 const dropZone = document.getElementById("dropZone")
 const fileInput = document.getElementById("fileInput")
 const uploadPrompt = document.getElementById("uploadPrompt")
-const imagePreview = document.getElementById("imagePreview")
-const previewImg = document.getElementById("previewImg")
-const removeImage = document.getElementById("removeImage")
+const imagePreviewContainer = document.getElementById("imagePreviewContainer")
+const imageCount = document.getElementById("imageCount")
+const imageUploadSection = document.getElementById("imageUploadSection")
+
+// Mode Selection
+const modeImageToImage = document.getElementById("modeImageToImage")
+const modeTextToImage = document.getElementById("modeTextToImage")
 
 // 检测是否为移动设备
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+// 存储上传的图片数组（最多9张）
+const MAX_IMAGES = 9
+let uploadedImages = []
+
+// 当前模式：'image-to-image' 或 'text-to-image'
+let currentMode = 'image-to-image'
 
 // 根据设备类型更新提示文字
 if (isMobile) {
@@ -19,7 +30,11 @@ if (isMobile) {
 
 // Click to upload (移动端和桌面端都支持)
 dropZone.addEventListener("click", () => {
-  fileInput.click()
+  if (uploadedImages.length < MAX_IMAGES) {
+    fileInput.click()
+  } else {
+    alert(`最多只能上传${MAX_IMAGES}张图片`)
+  }
 })
 
 // 移动端触摸反馈
@@ -37,12 +52,14 @@ if (isMobile) {
   })
 }
 
-// File input change (移动端和桌面端都支持)
+// File input change (移动端和桌面端都支持) - 支持多选
 fileInput.addEventListener("change", (e) => {
-  handleFile(e.target.files[0])
+  const files = Array.from(e.target.files)
+  handleFiles(files)
+  fileInput.value = "" // 清空input，允许重复选择相同文件
 })
 
-// Drag and drop (仅桌面端)
+// Drag and drop (仅桌面端) - 支持多张图片
 if (!isMobile) {
   dropZone.addEventListener("dragover", (e) => {
     e.preventDefault()
@@ -58,41 +75,96 @@ if (!isMobile) {
     e.preventDefault()
     dropZone.classList.remove("border-banana-500", "bg-banana-100")
 
-    const file = e.dataTransfer.files[0]
-    if (file && file.type.startsWith("image/")) {
-      handleFile(file)
-    }
+    const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith("image/"))
+    handleFiles(files)
   })
 }
 
-// 存储上传的图片 base64 数据
-let uploadedImageBase64 = null
+// Handle multiple files upload
+function handleFiles(files) {
+  // 检查是否超过最大数量
+  const remainingSlots = MAX_IMAGES - uploadedImages.length
+  if (files.length > remainingSlots) {
+    alert(`最多还能上传${remainingSlots}张图片，已为您选择前${remainingSlots}张`)
+    files = files.slice(0, remainingSlots)
+  }
 
-// Handle file upload
-function handleFile(file) {
-  if (!file || !file.type.startsWith("image/")) {
-    alert("Please upload a valid image file")
+  // 读取并添加图片
+  files.forEach(file => {
+    if (!file.type.startsWith("image/")) {
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const imageData = {
+        id: Date.now() + Math.random(), // 唯一ID
+        base64: e.target.result,
+        name: file.name
+      }
+      uploadedImages.push(imageData)
+      updateImagePreview()
+      updateImageCount()
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+// Update image preview area
+function updateImagePreview() {
+  if (uploadedImages.length === 0) {
+    imagePreviewContainer.classList.add("hidden")
     return
   }
 
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    uploadedImageBase64 = e.target.result // 保存 base64 数据用于 API 调用
-    previewImg.src = e.target.result
-    uploadPrompt.classList.add("hidden")
-    imagePreview.classList.remove("hidden")
-  }
-  reader.readAsDataURL(file)
+  imagePreviewContainer.classList.remove("hidden")
+  imagePreviewContainer.innerHTML = uploadedImages.map(img => `
+    <div class="relative group bg-gray-100 rounded-lg overflow-hidden" style="aspect-ratio: 1;">
+      <img src="${img.base64}" class="w-full h-full object-contain" alt="Preview">
+      <button onclick="removeImageById('${img.id}')" class="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition shadow-lg">×</button>
+    </div>
+  `).join('')
 }
 
-// Remove image
-removeImage.addEventListener("click", (e) => {
-  e.stopPropagation()
-  uploadedImageBase64 = null // 清除保存的图片数据
-  previewImg.src = ""
-  fileInput.value = ""
-  uploadPrompt.classList.remove("hidden")
-  imagePreview.classList.add("hidden")
+// Update image count display
+function updateImageCount() {
+  imageCount.textContent = `${uploadedImages.length}/${MAX_IMAGES}`
+}
+
+// Remove image by ID
+function removeImageById(id) {
+  uploadedImages = uploadedImages.filter(img => img.id != id)
+  updateImagePreview()
+  updateImageCount()
+}
+
+// Mode switching logic
+modeImageToImage.addEventListener("click", () => {
+  currentMode = 'image-to-image'
+
+  // Update button styles
+  modeImageToImage.className = "flex-1 px-4 py-3 bg-banana-500 text-white rounded-lg font-medium shadow-md hover:bg-banana-600 transition"
+  modeTextToImage.className = "flex-1 px-4 py-3 bg-banana-50 text-banana-700 rounded-lg font-medium hover:bg-banana-100 transition"
+
+  // Show image upload section
+  imageUploadSection.classList.remove("hidden")
+
+  // Reset placeholder
+  mainPrompt.placeholder = "A futuristic city powered by nano technology, golden hour lighting, ultra detailed..."
+})
+
+modeTextToImage.addEventListener("click", () => {
+  currentMode = 'text-to-image'
+
+  // Update button styles
+  modeTextToImage.className = "flex-1 px-4 py-3 bg-banana-500 text-white rounded-lg font-medium shadow-md hover:bg-banana-600 transition"
+  modeImageToImage.className = "flex-1 px-4 py-3 bg-banana-50 text-banana-700 rounded-lg font-medium hover:bg-banana-100 transition"
+
+  // Hide image upload section
+  imageUploadSection.classList.add("hidden")
+
+  // Reset placeholder
+  mainPrompt.placeholder = "A beautiful sunset over mountains, vibrant colors, photorealistic, 4k quality..."
 })
 
 // Generate Button
@@ -104,36 +176,52 @@ const resultImg = document.getElementById("resultImg")
 
 generateBtn.addEventListener("click", async () => {
   const prompt = mainPrompt.value.trim()
-  const hasImage = uploadedImageBase64 !== null
+  const hasImages = uploadedImages.length > 0
 
   if (!prompt) {
     alert("请输入提示词 / Please enter a prompt")
     return
   }
 
-  if (!hasImage) {
-    alert("请先上传图片 / Please upload an image first")
+  // 根据模式判断是否需要图片
+  if (currentMode === 'image-to-image' && !hasImages) {
+    alert("请先上传图片 / Please upload at least one image")
     return
   }
 
   // 显示加载状态
   generateBtn.innerHTML = "⏳ Generating..."
   generateBtn.disabled = true
+
+  const loadingMessage = currentMode === 'text-to-image'
+    ? 'AI 正在根据您的描述生成图片...'
+    : `AI 正在处理您的 ${uploadedImages.length} 张图片...`
+
   outputArea.innerHTML = `
     <div class="flex flex-col items-center justify-center">
       <div class="w-16 h-16 border-4 border-banana-200 border-t-banana-500 rounded-full animate-spin mb-4"></div>
-      <p class="text-gray-600 font-medium">AI 正在处理您的图片...</p>
+      <p class="text-gray-600 font-medium">${loadingMessage}</p>
       <p class="text-gray-400 text-sm mt-2">这可能需要 10-30 秒</p>
     </div>
   `
 
   try {
     console.log('🚀 开始调用 Gemini API...')
+    console.log('📝 Mode:', currentMode)
     console.log('📝 Prompt:', prompt)
-    console.log('🖼️ Image size:', uploadedImageBase64.length, 'bytes')
 
-    // 调用 Gemini 2.5 Flash Image API
-    const result = await callGeminiAPI(uploadedImageBase64, prompt)
+    let result
+    if (currentMode === 'text-to-image') {
+      // Text to Image 模式
+      console.log('🎨 Text to Image 模式')
+      result = await callTextToImageAPI(prompt)
+    } else {
+      // Image to Image 模式
+      console.log('🖼️ Images count:', uploadedImages.length)
+      const firstImage = uploadedImages[0].base64
+      console.log('🖼️ Image size:', firstImage.length, 'bytes')
+      result = await callGeminiAPI(firstImage, prompt)
+    }
 
     console.log('✅ API 返回结果:', result)
 
@@ -152,7 +240,64 @@ generateBtn.addEventListener("click", async () => {
 })
 
 /**
- * 调用 Gemini 2.5 Flash Image API
+ * 调用 Text to Image API (Gemini 2.5 Flash Image - Nano Banana)
+ */
+async function callTextToImageAPI(promptText) {
+  const config = window.NANO_BANANA_CONFIG
+
+  console.log('🔍 检查配置...', config)
+
+  if (!config || !config.API_KEY) {
+    throw new Error('API 配置未找到，请检查 config.js')
+  }
+
+  const requestBody = {
+    model: config.MODEL,
+    messages: [
+      {
+        role: "user",
+        content: promptText
+      }
+    ],
+    max_tokens: config.MAX_TOKENS,
+    temperature: config.TEMPERATURE
+  }
+
+  console.log('📤 发送 Text to Image 请求到:', `${config.API_BASE_URL}/chat/completions`)
+  console.log('📦 请求体:', requestBody)
+
+  const response = await fetch(`${config.API_BASE_URL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${config.API_KEY}`,
+      'HTTP-Referer': config.SITE_URL,
+      'X-Title': config.SITE_NAME
+    },
+    body: JSON.stringify(requestBody)
+  })
+
+  console.log('📥 响应状态:', response.status, response.statusText)
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    console.error('❌ API 错误响应:', errorData)
+    throw new Error(errorData.error?.message || `API 请求失败: ${response.status} ${response.statusText}`)
+  }
+
+  const data = await response.json()
+  console.log('📊 完整响应数据:', data)
+
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    console.error('❌ 数据格式异常:', data)
+    throw new Error('API 返回数据格式异常')
+  }
+
+  return data.choices[0].message.images
+}
+
+/**
+ * 调用 Gemini 2.5 Flash Image API (Image to Image)
  */
 async function callGeminiAPI(imageBase64, promptText) {
   const config = window.NANO_BANANA_CONFIG
@@ -222,10 +367,10 @@ async function callGeminiAPI(imageBase64, promptText) {
 /**
  * 显示生成结果
  */
-function displayResult(resultText) {
+function displayResult(resultImages) {
   console.log('🎨 开始显示结果...')
-  console.log('📝 结果文本:', resultText)
-  console.log('🖼️ 原图 base64 长度:', uploadedImageBase64?.length)
+  console.log('📝 结果文本:', resultImages)
+  // console.log('🖼️ 原图 base64 长度:', uploadedImageBase64?.length)
 
   outputArea.classList.add("hidden")
   generatedImage.classList.remove("hidden")
@@ -239,30 +384,30 @@ function displayResult(resultText) {
   // 检查返回结果是否包含图片URL（某些模型可能返回图片链接）
   // const imageUrlMatch = resultText.match(/https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp)/i)
 
-  if (resultText) {
-    // 如果返回的是图片URL，显示图片
-    const imageUrl = resultText[0].image_url.url;
+  if (resultImages) {
+    // 如果返回的是图片URL，显示图片（居中）
+    const imageUrl = resultImages[0].image_url.url;
     resultContainer.innerHTML = `
-      <div class="space-y-4">
-        <!-- API 生成的图片 -->
-        <div class="relative">
-          <img src="${imageUrl}" class="w-full rounded-xl shadow-lg mx-auto" alt="Generated Image"
-               style="max-height: 600px; object-fit: contain;">
+      <div class="flex flex-col items-center justify-center space-y-6">
+        <!-- API 生成的图片 - 居中显示 -->
+        <div class="relative max-w-full">
+          <img src="${imageUrl}" class="rounded-xl shadow-lg" alt="Generated Image"
+               style="max-height: 600px; max-width: 100%; object-fit: contain;">
           <div class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold">
             ✨ AI Generated
           </div>
         </div>
 
         <!-- 操作按钮 -->
-        <div class="flex gap-3">
+        <div class="flex gap-3 w-full max-w-2xl">
           <button onclick="downloadGeneratedImage('${imageUrl}')" class="flex-1 px-4 py-3 bg-banana-500 text-white rounded-lg hover:bg-banana-600 transition font-medium shadow-md">
-            <i class="fa-solid fa-download mr-2"></i>下载图片
+            下载图片
           </button>
           <button onclick="copyImageUrl('${imageUrl}')" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium">
-            <i class="fa-solid fa-copy mr-2"></i>复制链接
+            复制链接
           </button>
           <button onclick="resetGeneration()" class="px-4 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">
-            <i class="fa-solid fa-rotate-right mr-2"></i>重新生成
+            重新生成
           </button>
         </div>
       </div>
@@ -329,16 +474,16 @@ function escapeHtml(text) {
 }
 
 /**
- * 下载上传的原图
+ * 下载上传的原图 - depreacted
  */
 function downloadImage() {
   const link = document.createElement('a')
-  link.href = uploadedImageBase64
+  // link.href = uploadedImageBase64
   link.download = `nano-banana-${Date.now()}.png`
   link.click()
 }
 
-/**
+/*
  * 下载生成的图片
  */
 function downloadGeneratedImage(imageUrl) {
