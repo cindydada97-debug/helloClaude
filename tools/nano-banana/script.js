@@ -1,4 +1,4 @@
-// Image Upload Functionality
+// DOM Elements
 const dropZone = document.getElementById("dropZone")
 const fileInput = document.getElementById("fileInput")
 const uploadPrompt = document.getElementById("uploadPrompt")
@@ -6,12 +6,22 @@ const imagePreviewContainer = document.getElementById("imagePreviewContainer")
 const imageCount = document.getElementById("imageCount")
 const imageUploadSection = document.getElementById("imageUploadSection")
 
-// Mode Selection
+// Mode Selection Elements
 const modeImageToImage = document.getElementById("modeImageToImage")
 const modeTextToImage = document.getElementById("modeTextToImage")
 
+// Prompt and Output Elements
+const mainPrompt = document.getElementById("mainPrompt")
+const generateBtn = document.getElementById("generateBtn")
+const outputArea = document.getElementById("outputArea")
+const generatedImage = document.getElementById("generatedImage")
+const resultImg = document.getElementById("resultImg")
+
 // 检测是否为移动设备
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+console.log('📱 设备检测结果:', isMobile ? '移动端' : '桌面端')
+console.log('🌐 User Agent:', navigator.userAgent)
 
 // 存储上传的图片数组（最多9张）
 const MAX_IMAGES = 9
@@ -19,6 +29,56 @@ let uploadedImages = []
 
 // 当前模式：'image-to-image' 或 'text-to-image'
 let currentMode = 'image-to-image'
+
+// 初始化检查 - 验证所有必要元素是否正确加载
+function checkInitialization() {
+  console.log('🔍 开始初始化检查...')
+
+  const elements = {
+    'dropZone': dropZone,
+    'fileInput': fileInput,
+    'uploadPrompt': uploadPrompt,
+    'imagePreviewContainer': imagePreviewContainer,
+    'imageCount': imageCount,
+    'imageUploadSection': imageUploadSection,
+    'modeImageToImage': modeImageToImage,
+    'modeTextToImage': modeTextToImage,
+    'mainPrompt': mainPrompt,
+    'generateBtn': generateBtn,
+    'outputArea': outputArea,
+    'generatedImage': generatedImage
+  }
+
+  let allGood = true
+  for (const [name, element] of Object.entries(elements)) {
+    if (element) {
+      console.log(`✅ ${name} - 已找到`)
+    } else {
+      console.error(`❌ ${name} - 未找到！`)
+      allGood = false
+    }
+  }
+
+  if (allGood) {
+    console.log('✅ 所有元素初始化成功！')
+  } else {
+    console.error('❌ 部分元素初始化失败，请检查 HTML 结构')
+  }
+
+  return allGood
+}
+
+// 页面加载完成后执行初始化检查
+document.addEventListener('DOMContentLoaded', () => {
+  checkInitialization()
+})
+
+// 如果 DOM 已经加载完成，立即执行
+if (document.readyState === 'loading') {
+  console.log('⏳ 等待 DOM 加载完成...')
+} else {
+  checkInitialization()
+}
 
 // 根据设备类型更新提示文字
 if (isMobile) {
@@ -30,9 +90,14 @@ if (isMobile) {
 
 // Click to upload (移动端和桌面端都支持)
 dropZone.addEventListener("click", () => {
+  console.log('🖱️ dropZone 点击事件触发')
+  console.log('📊 当前已上传图片数:', uploadedImages.length)
+
   if (uploadedImages.length < MAX_IMAGES) {
+    console.log('✅ 触发文件选择器')
     fileInput.click()
   } else {
+    console.log('⚠️ 已达到最大上传数量')
     alert(`最多只能上传${MAX_IMAGES}张图片`)
   }
 })
@@ -54,7 +119,10 @@ if (isMobile) {
 
 // File input change (移动端和桌面端都支持) - 支持多选
 fileInput.addEventListener("change", (e) => {
+  console.log('📂 fileInput change 事件触发')
+  console.log('📂 选中的文件:', e.target.files)
   const files = Array.from(e.target.files)
+  console.log('📂 转换后的文件数组:', files)
   handleFiles(files)
   fileInput.value = "" // 清空input，允许重复选择相同文件
 })
@@ -82,6 +150,8 @@ if (!isMobile) {
 
 // Handle multiple files upload
 function handleFiles(files) {
+  console.log('📁 handleFiles 被调用，文件数量:', files.length)
+
   // 检查是否超过最大数量
   const remainingSlots = MAX_IMAGES - uploadedImages.length
   if (files.length > remainingSlots) {
@@ -90,8 +160,11 @@ function handleFiles(files) {
   }
 
   // 读取并添加图片
-  files.forEach(file => {
+  files.forEach((file, index) => {
+    console.log(`📷 处理第 ${index + 1} 张图片:`, file.name, file.type, file.size)
+
     if (!file.type.startsWith("image/")) {
+      console.warn('⚠️ 跳过非图片文件:', file.name)
       return
     }
 
@@ -103,8 +176,14 @@ function handleFiles(files) {
         name: file.name
       }
       uploadedImages.push(imageData)
+      console.log('✅ 图片已添加到数组，当前总数:', uploadedImages.length)
+      console.log('📊 图片数据 base64 长度:', e.target.result.length)
+
       updateImagePreview()
       updateImageCount()
+    }
+    reader.onerror = (error) => {
+      console.error('❌ 读取图片失败:', file.name, error)
     }
     reader.readAsDataURL(file)
   })
@@ -112,18 +191,36 @@ function handleFiles(files) {
 
 // Update image preview area
 function updateImagePreview() {
+  console.log('🖼️ updateImagePreview 被调用，图片数量:', uploadedImages.length)
+  console.log('📦 imagePreviewContainer 元素:', imagePreviewContainer)
+
   if (uploadedImages.length === 0) {
     imagePreviewContainer.classList.add("hidden")
+    console.log('⚠️ 没有图片，隐藏预览区域')
     return
   }
 
   imagePreviewContainer.classList.remove("hidden")
-  imagePreviewContainer.innerHTML = uploadedImages.map(img => `
-    <div class="relative group bg-gray-100 rounded-lg overflow-hidden" style="aspect-ratio: 1;">
-      <img src="${img.base64}" class="w-full h-full object-contain" alt="Preview">
-      <button onclick="removeImageById('${img.id}')" class="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition shadow-lg">×</button>
-    </div>
-  `).join('')
+  console.log('✅ 显示预览区域')
+
+  // 移动端删除按钮始终显示，桌面端悬停显示
+  const deleteButtonClass = isMobile
+    ? "absolute top-1 right-1 w-7 h-7 bg-red-500 text-white rounded-full text-sm hover:bg-red-600 transition shadow-lg flex items-center justify-center"
+    : "absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition shadow-lg"
+
+  const previewHTML = uploadedImages.map((img, index) => {
+    console.log(`🖼️ 生成预览 ${index + 1}:`, img.name, 'base64前20字符:', img.base64.substring(0, 20))
+    return `
+      <div class="relative group bg-gray-100 rounded-lg overflow-hidden" style="aspect-ratio: 1; min-height: 80px;">
+        <img src="${img.base64}" class="w-full h-full object-contain" alt="Preview ${index + 1}" loading="lazy">
+        <button onclick="removeImageById('${img.id}')" class="${deleteButtonClass}" type="button">×</button>
+      </div>
+    `
+  }).join('')
+
+  console.log('📝 生成的 HTML 长度:', previewHTML.length)
+  imagePreviewContainer.innerHTML = previewHTML
+  console.log('✅ HTML 已插入到容器中')
 }
 
 // Update image count display
@@ -133,46 +230,150 @@ function updateImageCount() {
 
 // Remove image by ID
 function removeImageById(id) {
+  console.log('🗑️ 删除图片，ID:', id)
+  console.log('📊 删除前图片数量:', uploadedImages.length)
   uploadedImages = uploadedImages.filter(img => img.id != id)
+  console.log('📊 删除后图片数量:', uploadedImages.length)
   updateImagePreview()
   updateImageCount()
 }
 
+// 调试辅助函数 - 输出当前状态
+window.debugNanoBanana = function() {
+  console.log('🔍 ========== Nano Banana 状态调试 ==========')
+  console.log('📱 设备类型:', isMobile ? '移动端' : '桌面端')
+  console.log('🎯 当前模式:', currentMode)
+  console.log('📊 已上传图片数量:', uploadedImages.length)
+  console.log('📷 图片列表:', uploadedImages.map(img => ({
+    id: img.id,
+    name: img.name,
+    size: img.base64.length + ' bytes'
+  })))
+  console.log('👁️ 图片上传区域可见性:', !imageUploadSection.classList.contains('hidden'))
+  console.log('👁️ 图片预览容器可见性:', !imagePreviewContainer.classList.contains('hidden'))
+  console.log('📝 Main Prompt 值:', mainPrompt.value)
+  console.log('📝 Main Prompt Placeholder:', mainPrompt.placeholder)
+  console.log('🔍 ========================================')
+}
+
 // Mode switching logic
-modeImageToImage.addEventListener("click", () => {
+function switchToImageToImageMode() {
+  console.log('🔄 切换到 Image to Image 模式')
   currentMode = 'image-to-image'
 
   // Update button styles
   modeImageToImage.className = "flex-1 px-4 py-3 bg-banana-500 text-white rounded-lg font-medium shadow-md hover:bg-banana-600 transition"
   modeTextToImage.className = "flex-1 px-4 py-3 bg-banana-50 text-banana-700 rounded-lg font-medium hover:bg-banana-100 transition"
 
-  // Show image upload section
+  // Show image upload section - 移除 hidden 类并清除内联样式
   imageUploadSection.classList.remove("hidden")
+  imageUploadSection.style.display = ""
+  console.log('✅ 显示图片上传区域')
+  console.log('📊 imageUploadSection.classList:', imageUploadSection.classList)
+  console.log('📊 imageUploadSection.style.display:', imageUploadSection.style.display)
 
-  // Reset placeholder
-  mainPrompt.placeholder = "A futuristic city powered by nano technology, golden hour lighting, ultra detailed..."
-})
+  // Clear uploaded images
+  uploadedImages = []
+  updateImagePreview()
+  updateImageCount()
+  console.log('✅ 已清空上传的图片')
 
-modeTextToImage.addEventListener("click", () => {
+  // Reset main prompt
+  if (mainPrompt) {
+    mainPrompt.value = ""
+    mainPrompt.placeholder = "A futuristic city powered by nano technology, golden hour lighting, ultra detailed..."
+    console.log('✅ 已重置 main prompt 输入和 placeholder')
+  } else {
+    console.error('❌ mainPrompt 元素未找到')
+  }
+
+  // Reset output gallery
+  resetGeneration()
+  console.log('✅ 已重置 output gallery')
+}
+
+function switchToTextToImageMode() {
+  console.log('🔄 切换到 Text to Image 模式')
   currentMode = 'text-to-image'
 
   // Update button styles
   modeTextToImage.className = "flex-1 px-4 py-3 bg-banana-500 text-white rounded-lg font-medium shadow-md hover:bg-banana-600 transition"
   modeImageToImage.className = "flex-1 px-4 py-3 bg-banana-50 text-banana-700 rounded-lg font-medium hover:bg-banana-100 transition"
 
-  // Hide image upload section
+  // Hide image upload section - 使用多种方式确保隐藏
   imageUploadSection.classList.add("hidden")
+  imageUploadSection.style.display = "none"
+  console.log('✅ 隐藏图片上传区域')
+  console.log('📊 imageUploadSection.classList:', imageUploadSection.classList)
+  console.log('📊 imageUploadSection.style.display:', imageUploadSection.style.display)
 
-  // Reset placeholder
-  mainPrompt.placeholder = "A beautiful sunset over mountains, vibrant colors, photorealistic, 4k quality..."
-})
+  // Clear uploaded images
+  uploadedImages = []
+  updateImagePreview()
+  updateImageCount()
+  console.log('✅ 已清空上传的图片')
 
-// Generate Button
-const generateBtn = document.getElementById("generateBtn")
-const mainPrompt = document.getElementById("mainPrompt")
-const outputArea = document.getElementById("outputArea")
-const generatedImage = document.getElementById("generatedImage")
-const resultImg = document.getElementById("resultImg")
+  // Reset main prompt
+  if (mainPrompt) {
+    mainPrompt.value = ""
+    mainPrompt.placeholder = "A beautiful sunset over mountains, vibrant colors, photorealistic, 4k quality..."
+    console.log('✅ 已重置 main prompt 输入和 placeholder:', mainPrompt.placeholder)
+  } else {
+    console.error('❌ mainPrompt 元素未找到')
+  }
+
+  // Reset output gallery
+  resetGeneration()
+  console.log('✅ 已重置 output gallery')
+}
+
+// 桌面端和移动端都支持 click 事件
+modeImageToImage.addEventListener("click", switchToImageToImageMode)
+modeTextToImage.addEventListener("click", switchToTextToImageMode)
+
+// 移动端额外添加触摸反馈
+if (isMobile) {
+  // Image to Image 按钮触摸反馈
+  modeImageToImage.addEventListener("touchstart", (e) => {
+    if (currentMode !== 'image-to-image') {
+      modeImageToImage.classList.add("bg-banana-100")
+    }
+  })
+  modeImageToImage.addEventListener("touchend", (e) => {
+    modeImageToImage.classList.remove("bg-banana-100")
+  })
+  modeImageToImage.addEventListener("touchcancel", (e) => {
+    modeImageToImage.classList.remove("bg-banana-100")
+  })
+
+  // Text to Image 按钮触摸反馈
+  modeTextToImage.addEventListener("touchstart", (e) => {
+    if (currentMode !== 'text-to-image') {
+      modeTextToImage.classList.add("bg-banana-100")
+    }
+  })
+  modeTextToImage.addEventListener("touchend", (e) => {
+    modeTextToImage.classList.remove("bg-banana-100")
+  })
+  modeTextToImage.addEventListener("touchcancel", (e) => {
+    modeTextToImage.classList.remove("bg-banana-100")
+  })
+}
+
+// 移动端 Generate 按钮触摸反馈
+if (isMobile) {
+  generateBtn.addEventListener("touchstart", (e) => {
+    if (!generateBtn.disabled) {
+      generateBtn.style.transform = "scale(0.98)"
+    }
+  })
+  generateBtn.addEventListener("touchend", (e) => {
+    generateBtn.style.transform = "scale(1)"
+  })
+  generateBtn.addEventListener("touchcancel", (e) => {
+    generateBtn.style.transform = "scale(1)"
+  })
+}
 
 generateBtn.addEventListener("click", async () => {
   const prompt = mainPrompt.value.trim()
